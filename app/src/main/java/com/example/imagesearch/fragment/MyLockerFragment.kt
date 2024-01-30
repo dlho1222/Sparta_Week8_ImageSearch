@@ -34,7 +34,7 @@ class MyLockerFragment : Fragment(), ImageClickListener {
     private fun initRecyclerView() {
         val likeContents = DocumentsManager.getLikeContents()
         imageAdapter =
-            ImageAdapter(requireContext(), this@MyLockerFragment, likeContents = likeContents)
+            ImageAdapter(this@MyLockerFragment,likeContents)
         binding.recyclerView.apply {
             adapter = imageAdapter
             layoutManager = GridLayoutManager(context, 2)

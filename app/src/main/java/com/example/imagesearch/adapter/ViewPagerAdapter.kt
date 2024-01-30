@@ -15,7 +15,8 @@ class ViewPagerAdapter(private val mainActivity: MainActivity) :
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> searchImageFragment
-            else -> myLockerFragment
+            1 -> myLockerFragment
+            else -> throw IllegalArgumentException()
         }
     }
 }

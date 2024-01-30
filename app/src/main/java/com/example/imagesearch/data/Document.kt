@@ -8,9 +8,11 @@ data class Document(
     val datetime: String,
     @SerializedName("display_sitename")
     val displaySiteName: String,
-    val doc_url: String,
+    @SerializedName("doc_url")
+    val docUrl: String,
     val height: Int,
-    val image_url: String,
+    @SerializedName("image_url")
+    val imageUrl: String,
     @SerializedName("thumbnail_url")
     val thumbnailUrl: String,
     val width: Int,

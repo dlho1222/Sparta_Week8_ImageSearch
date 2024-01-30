@@ -16,7 +16,6 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class ImageAdapter(
-    private val context: Context,
     private val listener: ImageClickListener? = null,
     private val likeContents: MutableList<Document>? = null
 ) :
@@ -43,7 +42,7 @@ class ImageAdapter(
                 tvSource.text = document.displaySiteName
                 tvDate.text = outputDateString.toString()
 
-                Glide.with(context)
+                Glide.with(itemView)
                     .load(document.thumbnailUrl)
                     .into(ivThumb)
 

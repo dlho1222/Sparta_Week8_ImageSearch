@@ -58,7 +58,7 @@ class SearchImageFragment : Fragment(), ImageClickListener {
 
     private fun initRecyclerView() {
         binding.recyclerView.apply {
-            imageAdapter = ImageAdapter(context, this@SearchImageFragment)
+            imageAdapter = ImageAdapter(this@SearchImageFragment)
             adapter = imageAdapter
             layoutManager = GridLayoutManager(context, 2)
             //검색 결과 80개 표시
