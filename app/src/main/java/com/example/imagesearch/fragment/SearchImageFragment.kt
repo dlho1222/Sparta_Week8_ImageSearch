@@ -10,21 +10,22 @@ import android.widget.EditText
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.imagesearch.Consts.KEYWORD
+import com.example.imagesearch.Consts.SEARCH_WORD
 import com.example.imagesearch.adapter.ImageAdapter
-import com.example.imagesearch.data.Document
+import com.example.imagesearch.data.SearchItem
 import com.example.imagesearch.databinding.FragmentSearchImageBinding
-import com.example.imagesearch.listener.ImageClickListener
-import com.example.imagesearch.manager.DocumentsManager
 import com.example.imagesearch.retrofit.RetrofitInstance
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SearchImageFragment : Fragment(), ImageClickListener {
+class SearchImageFragment : Fragment() {
     private var _binding: FragmentSearchImageBinding? = null
     private val binding get() = _binding!!
     private lateinit var imageAdapter: ImageAdapter
+    private var searchItems : MutableList<SearchItem> = mutableListOf()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -45,7 +46,12 @@ class SearchImageFragment : Fragment(), ImageClickListener {
                 //Api 연결 시 IO 으로 연결 하고, UI갱신은 withContext로 Main에서 처리
                 CoroutineScope(Dispatchers.IO).launch {
                     val responseData = RetrofitInstance.imageSearchApi.getImage(query = query)
-                    DocumentsManager.addDocument(responseData.documents)
+                    responseData.documents.forEach{
+                        val thumbUrl = it.thumbnailUrl
+                        val title = it.displaySiteName
+                        val dateTime = it.datetime
+                        searchItems.add(SearchItem(thumbUrl = thumbUrl, title = title, dateTime = dateTime))
+                    }
                     withContext(Dispatchers.Main) {
                         initRecyclerView()
                     }
@@ -58,25 +64,16 @@ class SearchImageFragment : Fragment(), ImageClickListener {
 
     private fun initRecyclerView() {
         binding.recyclerView.apply {
-            imageAdapter = ImageAdapter(this@SearchImageFragment)
+            imageAdapter = ImageAdapter(searchItems,requireContext())
             adapter = imageAdapter
+            itemAnimator = null
             layoutManager = GridLayoutManager(context, 2)
-            //검색 결과 80개 표시
-            val searchList = DocumentsManager.getDocument()
-            val sublist = if (searchList.size > 80) searchList.subList(0, 80) else searchList
-            imageAdapter.submitList(sublist)
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-    }
-
-    //이미지 클릭시 좋아요 표시
-    override fun onClickImage(document: Document, position: Int) {
-        DocumentsManager.toggleLike(document)
-        imageAdapter.notifyItemChanged(position)
     }
 
     //키보드 내리기
@@ -107,8 +104,4 @@ class SearchImageFragment : Fragment(), ImageClickListener {
         super.onResume()
     }
 
-    companion object {
-        private const val SEARCH_WORD = "searchWord"
-        private const val KEYWORD = "keyWord"
-    }
 }

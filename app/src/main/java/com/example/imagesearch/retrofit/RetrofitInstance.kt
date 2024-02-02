@@ -1,10 +1,11 @@
 package com.example.imagesearch.retrofit
 
+import com.example.imagesearch.Consts.BASE_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance {
-    private const val BASE_URL = "https://dapi.kakao.com"
+
     private val retrofit by lazy {
         Retrofit
             .Builder()

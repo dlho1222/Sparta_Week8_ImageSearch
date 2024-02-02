@@ -1,14 +1,15 @@
 package com.example.imagesearch.retrofit
 
+import com.example.imagesearch.Consts.API_MAX_RESULT
+import com.example.imagesearch.Consts.AUTH_HEADER
+import com.example.imagesearch.Consts.PAGE_NUMBER
+import com.example.imagesearch.Consts.SORT_DEFAULT
 import com.example.imagesearch.data.ImageSearch
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
 
-private const val AUTH_HEADER = "KakaoAK 32cf9215aec6834ed31e301f93ba9df6"
-private const val SORT_DEFAULT = "accuracy"
-private const val PAGE_NUMBER = 1
-private const val API_MAX_RESULT = 80
+
 interface ImageSearchApi {
     @GET("/v2/search/image")
     suspend fun getImage(
